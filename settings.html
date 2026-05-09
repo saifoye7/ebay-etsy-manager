@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - eBay/Etsy Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"></div>
+    <aside id="sidebar" class="sidebar fixed left-0 top-0 h-full w-64 text-white z-50 overflow-y-auto">
+        <div class="p-6">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center"><i class="fas fa-store text-white"></i></div>
+                <div><h1 class="font-bold text-lg leading-tight">E-Commerce</h1><p class="text-xs text-gray-400">Manager Pro</p></div>
+            </div>
+            <nav class="space-y-1">
+                <a href="index.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm"><i class="fas fa-chart-line w-5"></i> Dashboard</a>
+                <a href="orders.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm"><i class="fas fa-shopping-cart w-5"></i> Orders</a>
+                <a href="listings.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm"><i class="fas fa-tags w-5"></i> Listings</a>
+                <a href="inventory.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm"><i class="fas fa-boxes w-5"></i> Inventory</a>
+                <a href="returns.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm"><i class="fas fa-undo w-5"></i> Returns</a>
+                <a href="recycle-bin.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm"><i class="fas fa-trash-alt w-5"></i> Recycle Bin</a>
+                <div class="admin-only"><a href="users.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm"><i class="fas fa-users w-5"></i> Users</a></div>
+                <a href="settings.html" class="sidebar-link active flex items-center gap-3 px-4 py-3 text-sm"><i class="fas fa-cog w-5"></i> Settings</a>
+            </nav>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10">
+            <button id="logout-btn" class="flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:text-red-300 w-full"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </aside>
+
+    <main class="main-content lg:ml-64 min-h-screen">
+        <header class="bg-white shadow-sm sticky top-0 z-30">
+            <div class="flex items-center justify-between px-6 py-4">
+                <div class="flex items-center gap-4">
+                    <button id="sidebar-toggle" class="lg:hidden text-gray-600 hover:text-gray-900"><i class="fas fa-bars text-xl"></i></button>
+                    <h2 class="text-xl font-bold text-gray-800">Settings</h2>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="hidden md:flex items-center bg-gray-100 rounded-lg px-3 py-2">
+                        <i class="fas fa-search text-gray-400 mr-2"></i>
+                        <input type="text" id="global-search" placeholder="Search..." class="bg-transparent border-none outline-none text-sm w-64">
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="text-right hidden sm:block">
+                            <p id="user-name" class="text-sm font-semibold text-gray-800">User</p>
+                            <p id="user-role" class="text-xs text-gray-500">Role</p>
+                        </div>
+                        <div id="user-avatar" class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">U</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="p-6 space-y-6 max-w-4xl">
+            <!-- General Settings -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="fas fa-cog text-blue-500"></i> General Settings</h3>
+                <form id="general-settings-form" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+                            <input type="text" id="setting-company" class="form-input w-full px-4 py-2 rounded-lg" placeholder="Your Store Name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Currency</label>
+                            <select id="setting-currency" class="form-input w-full px-4 py-2 rounded-lg">
+                                <option value="USD">USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="GBP">GBP (£)</option>
+                                <option value="PKR">PKR (₨)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Low Stock Threshold</label>
+                            <input type="number" id="setting-threshold" min="1" class="form-input w-full px-4 py-2 rounded-lg" placeholder="20">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Default Platform</label>
+                            <select id="setting-platform" class="form-input w-full px-4 py-2 rounded-lg">
+                                <option value="eBay">eBay</option>
+                                <option value="Etsy">Etsy</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary px-6 py-2 rounded-lg text-white font-medium">Save Settings</button>
+                </form>
+            </div>
+
+            <!-- Google Drive Integration -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="fab fa-google-drive text-green-500"></i> Google Drive Integration</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div>
+                            <p class="font-medium text-gray-800">Google Drive Backup</p>
+                            <p class="text-sm text-gray-500">Automatically backup data to Google Drive</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="gdrive-toggle" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        </label>
+                    </div>
+                    <div class="p-4 bg-blue-50 rounded-lg border border-blue-100">
+                        <p class="text-sm text-blue-800"><i class="fas fa-info-circle mr-1"></i> To enable Google Drive integration, you need to configure Google OAuth credentials in the backend. This is a placeholder for future backend integration.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button onclick="exportToDrive()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2">
+                            <i class="fab fa-google-drive"></i> Export to Drive (CSV)
+                        </button>
+                        <button onclick="exportAllJSON()" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2">
+                            <i class="fas fa-download"></i> Backup All Data (JSON)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Management -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="fas fa-database text-purple-500"></i> Data Management</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div>
+                            <p class="font-medium text-gray-800">Import Data</p>
+                            <p class="text-sm text-gray-500">Import orders, inventory, or listings from CSV/JSON</p>
+                        </div>
+                        <label class="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2">
+                            <i class="fas fa-upload"></i> Import
+                            <input type="file" id="import-file" accept=".csv,.json" class="hidden" onchange="handleImport(this)">
+                        </label>
+                    </div>
+                    <div class="flex items-center justify-between p-4 bg-red-50 rounded-lg border border-red-100">
+                        <div>
+                            <p class="font-medium text-red-800">Reset All Data</p>
+                            <p class="text-sm text-red-600">This will delete all data and restore defaults. Cannot be undone!</p>
+                        </div>
+                        <button onclick="resetAllData()" class="btn-danger px-4 py-2 rounded-lg text-white text-sm font-medium">
+                            <i class="fas fa-exclamation-triangle"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="fas fa-info-circle text-gray-500"></i> About</h3>
+                <div class="space-y-2 text-sm text-gray-600">
+                    <p><strong>App Name:</strong> eBay/Etsy Manager Pro</p>
+                    <p><strong>Version:</strong> 1.0.0</p>
+                    <p><strong>Frontend:</strong> HTML, Tailwind CSS, Vanilla JS</p>
+                    <p><strong>Database:</strong> Simulated PostgreSQL (localStorage)</p>
+                    <p><strong>Status:</strong> Frontend Ready - Backend integration pending</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/data-store.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/settings.js"></script>
+</body>
+</html>

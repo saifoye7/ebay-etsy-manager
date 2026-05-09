@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users - eBay/Etsy Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"></div>
+    <aside id="sidebar" class="sidebar fixed left-0 top-0 h-full w-64 text-white z-50 overflow-y-auto">
+        <div class="p-6">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center"><i class="fas fa-store text-white"></i></div>
+                <div><h1 class="font-bold text-lg leading-tight">E-Commerce</h1><p class="text-xs text-gray-400">Manager Pro</p></div>
+            </div>
+            <nav class="space-y-1">
+                <a href="index.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm"><i class="fas fa-chart-line w-5"></i> Dashboard</a>
+                <a href="orders.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm"><i class="fas fa-shopping-cart w-5"></i> Orders</a>
+                <a href="listings.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm"><i class="fas fa-tags w-5"></i> Listings</a>
+                <a href="inventory.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm"><i class="fas fa-boxes w-5"></i> Inventory</a>
+                <a href="returns.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm"><i class="fas fa-undo w-5"></i> Returns</a>
+                <a href="recycle-bin.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm"><i class="fas fa-trash-alt w-5"></i> Recycle Bin</a>
+                <div class="admin-only"><a href="users.html" class="sidebar-link active flex items-center gap-3 px-4 py-3 text-sm"><i class="fas fa-users w-5"></i> Users</a></div>
+                <a href="settings.html" class="sidebar-link flex items-center gap-3 px-4 py-3 text-sm"><i class="fas fa-cog w-5"></i> Settings</a>
+            </nav>
+        </div>
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10">
+            <button id="logout-btn" class="flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:text-red-300 w-full"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </aside>
+
+    <main class="main-content lg:ml-64 min-h-screen">
+        <header class="bg-white shadow-sm sticky top-0 z-30">
+            <div class="flex items-center justify-between px-6 py-4">
+                <div class="flex items-center gap-4">
+                    <button id="sidebar-toggle" class="lg:hidden text-gray-600 hover:text-gray-900"><i class="fas fa-bars text-xl"></i></button>
+                    <h2 class="text-xl font-bold text-gray-800">User Management</h2>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="hidden md:flex items-center bg-gray-100 rounded-lg px-3 py-2">
+                        <i class="fas fa-search text-gray-400 mr-2"></i>
+                        <input type="text" id="global-search" placeholder="Search..." class="bg-transparent border-none outline-none text-sm w-64">
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="text-right hidden sm:block">
+                            <p id="user-name" class="text-sm font-semibold text-gray-800">User</p>
+                            <p id="user-role" class="text-xs text-gray-500">Role</p>
+                        </div>
+                        <div id="user-avatar" class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">U</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="p-6 space-y-6">
+            <div class="bg-white rounded-xl shadow-sm p-4">
+                <div class="flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
+                    <input type="text" id="user-search" placeholder="Search users..." class="form-input px-4 py-2 rounded-lg text-sm w-full md:w-64">
+                    <button onclick="openModal('user-modal')" class="btn-primary px-4 py-2 rounded-lg text-white text-sm font-medium flex items-center gap-2">
+                        <i class="fas fa-plus"></i> Add User
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="data-table w-full">
+                        <thead>
+                            <tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Created</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody id="users-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="user-modal" class="modal-overlay fixed inset-0 z-50 hidden flex items-center justify-center p-4">
+        <div class="modal-content bg-white rounded-xl shadow-2xl w-full max-w-md">
+            <div class="border-b px-6 py-4 flex items-center justify-between rounded-t-xl">
+                <h3 class="text-lg font-bold text-gray-800" id="user-modal-title">Add User</h3>
+                <button onclick="closeModal('user-modal')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <form id="user-form" class="p-6 space-y-4">
+                <input type="hidden" id="user-id">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+                    <input type="text" id="user-fullname" required class="form-input w-full px-4 py-2 rounded-lg" placeholder="Full name">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                    <input type="email" id="user-email" required class="form-input w-full px-4 py-2 rounded-lg" placeholder="email@example.com">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Password *</label>
+                    <input type="password" id="user-password" required class="form-input w-full px-4 py-2 rounded-lg" placeholder="Min 6 characters">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Role *</label>
+                    <select id="user-role-select" required class="form-input w-full px-4 py-2 rounded-lg">
+                        <option value="admin">Admin (Full Access)</option>
+                        <option value="manager">Manager (Edit Access)</option>
+                        <option value="viewer">Viewer (Read Only)</option>
+                    </select>
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="submit" class="btn-primary flex-1 py-2.5 rounded-lg text-white font-medium">Save User</button>
+                    <button type="button" onclick="closeModal('user-modal')" class="flex-1 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/data-store.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/users.js"></script>
+</body>
+</html>
